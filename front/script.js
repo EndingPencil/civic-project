@@ -1,5 +1,4 @@
 // --- START: SUPABASE SETUP ---
-
 const SUPABASE_URL = 'https://zwuarlfxdruwwdceirjt.supabase.co'; // Replace with your URL
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3dWFybGZ4ZHJ1d3dkY2Vpcmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNzYwMDQsImV4cCI6MjA3MjY1MjAwNH0.OtVcgZ-mDvLpP8hSu5Go9A-ZyhOqkdoMANwvN97CpXg'; // Replace with your anon key
 
@@ -31,11 +30,61 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('report-section').classList.add('active');
             } else if (event.target.id === 'show-previous') {
                 document.getElementById('previous-issues-section').classList.add('active');
+                // --- START: PHASE 3 EDIT ---
+                // This line calls the new function to load issues
+                loadIssues(); 
+                // --- END: PHASE 3 EDIT ---
             } else if (event.target.id === 'show-login') {
                 document.getElementById('login-section').classList.add('active');
             }
         });
     });
+
+    // --- START: PHASE 3 NEW FUNCTION ---
+    // This entire function is new. It fetches and displays the issues.
+    async function loadIssues() {
+        const issuesListDiv = document.getElementById('issues-list');
+        issuesListDiv.innerHTML = '<h3>Loading issues...</h3>'; // Show a temporary loading message
+
+        // 1. Fetch all rows from the 'issues' table, ordered by newest first
+        const { data: issues, error } = await supabaseClient
+            .from('issues')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Error fetching issues:', error);
+            issuesListDiv.innerHTML = '<p>Sorry, could not load the issues right now.</p>';
+            return; // Stop the function if there's an error
+        }
+
+        if (issues.length === 0) {
+            issuesListDiv.innerHTML = '<p>No issues have been reported yet. Be the first!</p>';
+            return; // Stop the function if there are no issues
+        }
+
+        // 2. Clear the loading message
+        issuesListDiv.innerHTML = '';
+
+        // 3. Loop through each issue and create an HTML card for it
+        issues.forEach(issue => {
+            const issueCardHTML = `
+                <div class="issue-card">
+                    <div class="issue-details">
+                        <h3>${issue.problem_type} on ${issue.location}</h3>
+                        <p>Reported: ${new Date(issue.created_at).toLocaleDateString()}</p>
+                        <p>Description: ${issue.description}</p>
+                    </div>
+                    <div class="issue-status status-${issue.status.toLowerCase().replace(' ', '-')}">
+                        ${issue.status}
+                    </div>
+                </div>
+            `;
+            // Add the new card's HTML to the list
+            issuesListDiv.innerHTML += issueCardHTML;
+        });
+    }
+    // --- END: PHASE 3 NEW FUNCTION ---
 
     // Form submission event listeners (placeholder for future functionality)
     const loginForm = document.getElementById('login-form');
