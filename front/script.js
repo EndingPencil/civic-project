@@ -1,3 +1,13 @@
+// --- START: SUPABASE SETUP ---
+
+const SUPABASE_URL = 'https://zwuarlfxdruwwdceirjt.supabase.co'; // Replace with your URL
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3dWFybGZ4ZHJ1d3dkY2Vpcmp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNzYwMDQsImV4cCI6MjA3MjY1MjAwNH0.OtVcgZ-mDvLpP8hSu5Go9A-ZyhOqkdoMANwvN97CpXg'; // Replace with your anon key
+
+// Create the Supabase client connection
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// --- END: SUPABASE SETUP ---
+
 document.addEventListener('DOMContentLoaded', () => {
     // Get all navigation links and content sections
     const navLinks = document.querySelectorAll('.nav-link');
@@ -35,9 +45,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const reportForm = document.getElementById('report-form');
-    reportForm.addEventListener('submit', (event) => {
+    reportForm.addEventListener('submit', async (event) => { // Note the 'async' keyword
         event.preventDefault();
-        alert('Report form submitted! (This is a placeholder action)');
-    });
 
+        // 1. Get the data from the form fields
+        const problemType = document.getElementById('problem-type').value;
+        const location = document.getElementById('problem-location').value;
+        const description = document.getElementById('problem-description').value;
+
+        // 2. Use Supabase to insert the data into the 'issues' table
+        const { data, error } = await supabaseClient // <-- USE THE CORRECT VARIABLE NAME HERE
+            .from('issues')
+            .insert([
+                {
+                    problem_type: problemType,
+                    location: location,
+                    description: description,
+                    status: 'Pending' // We set a default status for all new reports
+                }
+            ]);
+
+        if (error) {
+            console.error('Error submitting report:', error);
+            alert('There was an error submitting your report.');
+        } else {
+            alert('Report submitted successfully! Thank you for your help.');
+            reportForm.reset(); // This clears the form fields for the next report
+        }
+    });
 });
