@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Municipality Road Issues</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+
+    <header class="navbar">
+        <div class="nav-brand">Road Issues</div>
+        <nav>
+            <a href="#" class="nav-link" id="show-report">Report a Problem</a>
+            <a href="#" class="nav-link" id="show-previous">Previous Issues</a>
+            <a href="#" class="nav-link" id="show-login">Log In</a>
+        </nav>
+    </header>
+
+    <main class="main-container">
+
+        <section id="login-section" class="content-section">
+            <div class="form-container login-container">
+                <h2>Log In</h2>
+                <form id="login-form">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn btn-login">Log In</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="report-section" class="content-section hidden">
+            <div class="form-container report-container">
+                <h2>Report a Problem</h2>
+                <form id="report-form">
+                    <div class="form-group">
+                        <label for="problem-type">Type of Problem</label>
+                        <select id="problem-type" name="problem-type">
+                            <option value="">-- Choose a category --</option>
+                            <option value="pothole">Pothole</option>
+                            <option value="streetlight">Streetlight Out</option>
+                            <option value="blocked-drain">Blocked Drain</option>
+                            <option value="signage">Missing Signage</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="problem-location">Location</label>
+                        <input type="text" id="problem-location" name="problem-location" placeholder="e.g., Main St, near City Hall" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="problem-description">Description</label>
+                        <textarea id="problem-description" name="problem-description" rows="5" placeholder="Please provide details about the issue."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-submit">Submit Report</button>
+                </form>
+            </div>
+        </section>
+
+        <section id="previous-issues-section" class="content-section hidden">
+            <div class="previous-issues-container">
+                <h2>Previous Issues</h2>
+                <div id="issues-list">
+                    <div class="issue-card">
+                        <div class="issue-details">
+                            <h3>Pothole on Oak Street</h3>
+                            <p>Reported: August 25, 2025</p>
+                            <p>Description: Large pothole near the intersection of Oak and 3rd.</p>
+                        </div>
+                        <div class="issue-status status-solved">Solved</div>
+                    </div>
+                    <div class="issue-card">
+                        <div class="issue-details">
+                            <h3>Broken Streetlight</h3>
+                            <p>Reported: August 20, 2025</p>
+                            <p>Description: Streetlight is out in front of 123 Maple Avenue.</p>
+                        </div>
+                        <div class="issue-status status-in-progress">In Progress</div>
+                    </div>
+                    <div class="issue-card">
+                        <div class="issue-details">
+                            <h3>Missing Stop Sign</h3>
+                            <p>Reported: September 1, 2025</p>
+                            <p>Description: Stop sign at the corner of Pine and Elm has been knocked down.</p>
+                        </div>
+                        <div class="issue-status status-pending">Pending</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <script src="script.js"></script>
+</body>
+</html>
